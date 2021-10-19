@@ -45,14 +45,14 @@ function App() {
 
   function handleCreateOrEditActivity(activity: Activity) {
     setSubmitting(true);
-    if (activity.id) {
+    if (activity.id) {                  // if the activity id already exists ie. editing an entry
       agent.Activities.update(activity).then(() => {
         setActivities([...activities.filter(x => x.id !== activity.id), activity])
         setSelectedActivity(activity);
         setEditMode(false);
         setSubmitting(false);
       })
-    } else {
+    } else {                            // creating a new entry
       activity.id = uuid();
       agent.Activities.create(activity).then(() => {
         setActivities([...activities, activity]);
@@ -64,7 +64,11 @@ function App() {
   }
   
   function handleDeleteActivity(id: string) {
-    setActivities([...activities.filter(x => x.id !== id)])
+    setSubmitting(true);
+    agent.Activities.delete(id).then(() => {
+      setActivities([...activities.filter(x => x.id !== id)]);
+      setSubmitting(false);
+    })
   }
 
 if (loading) return <LoadingComponent content='Loading application' />

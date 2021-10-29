@@ -1,5 +1,8 @@
-import axios, { AxiosResponse } from "axios";
+import axios, { AxiosError, AxiosResponse } from "axios";
+import { toast } from "react-toastify";
+import { history } from "../..";
 import { Activity } from "../models/activity";
+import { store } from "../stores/store";
 
 const sleep = (delay: number) => {              // create a time delay to provide loading indicators
     return new Promise((resolve) => {
@@ -9,15 +12,43 @@ const sleep = (delay: number) => {              // create a time delay to provid
 
 axios.defaults.baseURL = 'http://localhost:5000/api';
 
-axios.interceptors.response.use(async response => {
-    try {                                       // use the time delay every time a response is requested
-        await sleep(1000);                      // return the response after 1 second (1,000 milliseconds)
-        return response;
-    } catch (error) {                           // deal with an error from requesting a response
-        console.log(error);
-        return await Promise.reject(error);
+axios.interceptors.response.use(async response => {                                       
+    await sleep(1000);                      // return the response after 1 second (1,000 milliseconds)
+    return response;                        // use the time delay every time a response is requested
+}, (error: AxiosError) => {
+    const {data, status, config} = error.response!;
+    switch (status) {
+        case 400:
+            if (typeof data === 'string') {
+                toast.error(data);
+            }
+            if (config.method === 'get' && data.errors.hasOwnProperty('id')) {
+                history.push('/not-found');
+            }
+            if (data.errors) {
+                const modalStateErrors = [];
+                for (const key in data.errors) {
+                    if (data.errors[key]) {
+                        modalStateErrors.push(data.errors[key])
+                    }
+                }
+                throw modalStateErrors.flat();
+            }
+            break;
+        case 401:
+            toast.error('unauthorised');
+            break;
+        case 404:
+            history.push('/not-found');
+            break;
+        case 500:
+            store.commonStore.setServerError(data);
+            history.push('/server-error');
+            break;
     }
-});
+    return Promise.reject(error);
+}
+);
 
 const responseBody = <T>(response: AxiosResponse<T>) => response.data;
 

@@ -1,15 +1,18 @@
 // set-up a store of all of the others stores used
 import { createContext, useContext } from "react";
 import ActivityStore from "./activityStore";
+import CommonStore from "./commonStore";
 
 // property of type 'ActivityStore' (a class)
 interface Store {
-    activityStore: ActivityStore
+    activityStore: ActivityStore;
+    commonStore: CommonStore;
 }
 
 // object property of activity, which is a new instance of 'ActivityStore'
 export const store: Store = {
-    activityStore: new ActivityStore()      
+    activityStore: new ActivityStore(),
+    commonStore: new CommonStore()      
 }
 
 // React context 

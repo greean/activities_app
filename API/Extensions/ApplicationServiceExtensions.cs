@@ -1,4 +1,4 @@
-// Services extracted to declutter and now called from the 'Startup.cs' file  
+// Application Services extracted to declutter and now called from the 'Startup.cs' file  
 using Application.Activities;
 using Application.Core;
 using AutoMapper;

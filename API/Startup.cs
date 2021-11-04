@@ -27,6 +27,7 @@ namespace API
                 config.RegisterValidatorsFromAssemblyContaining<Create>();
             });
             services.AddApplicationServices(_config);   // see ApplicationServiceExtensions.cs
+            services.AddIdentityServices(_config);      // see IdentityServiceExtensions.cs
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

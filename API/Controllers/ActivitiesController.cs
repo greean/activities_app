@@ -7,7 +7,6 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace API.Controllers
 {
-    [AllowAnonymous]    // just for development so we don't need to be logged in ie. not passing a JWT with every request
     public class ActivitiesController : BaseApiController
     {
         [HttpGet]

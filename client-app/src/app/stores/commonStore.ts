@@ -9,11 +9,11 @@ export default class CommonStore {
     constructor() {
         makeAutoObservable(this);
 
-        reaction(
+        reaction(                   // react to any changes of observables automatically
             () => this.token,
             token => {
-                if (token) {
-                    window.localStorage.setItem('jwt', token)
+                if (token) {        // if there is a token available from the API, store the token in the browsers local storage
+                    window.localStorage.setItem('jwt', token)       // set the key 'jwt' and the value - token
                 } else {
                     window.localStorage.removeItem('jwt')
                 }

@@ -13,7 +13,7 @@ const sleep = (delay: number) => {              // create a time delay to provid
 
 axios.defaults.baseURL = 'http://localhost:5000/api';
 
-// send up a token with every request when there is a token in the common store
+// send up a token with every request when there is a token in the common store i.e. user is logged in
 axios.interceptors.request.use(config => {
     const token = store.commonStore.token;
     if (token) config.headers.Authorization = `Bearer ${token}`

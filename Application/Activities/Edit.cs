@@ -40,8 +40,10 @@ namespace Application.Activities
 
                 if(activity == null) return null;
 
+                // map the updated activity details (in the request) to the original activity object
                 _mapper.Map(request.Activity, activity);
 
+                // save changes to the datebase
                 var result = await _context.SaveChangesAsync() > 0;
 
                 if (!result) return Result<Unit>.Failure("Failed to update activity");

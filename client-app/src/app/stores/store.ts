@@ -3,6 +3,7 @@ import { createContext, useContext } from "react";
 import ActivityStore from "./activityStore";
 import CommonStore from "./commonStore";
 import ModalStore from "./modalStore";
+import ProfileStore from "./profileStore";
 import UserStore from "./userStore";
 
 // property of type 'ActivityStore' (a class)
@@ -11,6 +12,7 @@ interface Store {
     commonStore: CommonStore;
     userStore: UserStore;
     modalStore: ModalStore;
+    profileStore: ProfileStore;
 }
 
 // object property of activity, which is a new instance of 'ActivityStore'
@@ -18,7 +20,8 @@ export const store: Store = {
     activityStore: new ActivityStore(),
     commonStore: new CommonStore(),
     userStore: new UserStore(),
-    modalStore: new ModalStore()    
+    modalStore: new ModalStore(),
+    profileStore: new ProfileStore()    
 }
 
 // React context 

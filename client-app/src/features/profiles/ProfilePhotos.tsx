@@ -12,7 +12,7 @@ interface Props {
 export default observer(function ProfilePhotos({profile}: Props) {
     // get the current user from the profileStore
     const {profileStore: {isCurrentUser, uploadPhoto, uploading, 
-        loading, setMainPhoto}} = useStore();
+        loading, setMainPhoto, deletePhoto}} = useStore();
 
     // add local state
     const [addPhotoMode, setAddPhotoMode] = useState(false);
@@ -25,6 +25,10 @@ export default observer(function ProfilePhotos({profile}: Props) {
     function handleSetMainPhoto(photo: Photo, e: SyntheticEvent<HTMLButtonElement>) {
         setTarget(e.currentTarget.name);
         setMainPhoto(photo);
+    }
+    function handleDeletePhoto(photo: Photo, e: SyntheticEvent<HTMLButtonElement>) {
+        setTarget(e.currentTarget.name);
+        deletePhoto(photo);
     }
 
     return (
@@ -49,18 +53,29 @@ export default observer(function ProfilePhotos({profile}: Props) {
                                 {profile.photos?.map(photo => (
                                     <Card key={photo.id}>
                                         <Image src={photo.url} />
+                                        {/* only display below buttons if profile is of the current user */}
                                         {isCurrentUser && (
                                             <Button.Group fluid widths={2}>
+                                                {/* button to set photo as the users main photo, unless already set */}
                                                 <Button
                                                     basic
                                                     color='green'
                                                     content='Main'
+                                                    name={'main' + photo.id}
+                                                    disabled={photo.isMain}
+                                                    loading={target === 'main' + photo.id && loading}
+                                                    onClick={e => handleSetMainPhoto(photo, e)}
+                                                />
+                                                {/* button to delete the photo, unless is the users main photo */}
+                                                <Button 
+                                                    basic 
+                                                    color='red' 
+                                                    icon='trash'
                                                     name={photo.id}
                                                     disabled={photo.isMain}
                                                     loading={target === photo.id && loading}
-                                                    onClick={e => handleSetMainPhoto(photo, e)}
+                                                    onClick={e => handleDeletePhoto(photo, e)}
                                                 />
-                                                <Button basic color='red' icon='trash' />
                                             </Button.Group>
                                         )}
                                     </Card>
